@@ -12,16 +12,16 @@ project "LearningOpenGL"
 
     files { 
         "%{prj.name}/src/**.h", 
-        "%{prj.name}/src/**.cc"
+        "%{prj.name}/src/**.cpp"
     }
 
-    configuration "macosx"
-        links {
-            "Cocoa.framework", 
-            "IOKit.framework", 
-            "CoreVideo.framework",
-            "OpenGL.framework"
-        }
+    -- configuration "macosx"
+    --     links {
+    --         "Cocoa.framework", 
+    --         "IOKit.framework", 
+    --         "CoreVideo.framework",
+    --         "OpenGL.framework"
+    --     }
 
     -- including GLFW headers
     includedirs { 
@@ -31,13 +31,14 @@ project "LearningOpenGL"
 
     -- linking with GLFW
     libdirs {
-        "%{prj.name}/vender/GLFW/lib-macos",
+        "%{prj.name}/vender/GLFW/lib-vc2019",
         "%{prj.name}/vender/GLEW/lib"
     }
 
     links {
         "glfw3",
-        "GLEW"
+        "glew32s",
+        "opengl32"
     }
 
     defines {

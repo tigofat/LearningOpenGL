@@ -47,9 +47,6 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 
 int main(void)
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window;
 
@@ -69,7 +66,7 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     // WARNING: call glewInit() after glfwMakeContextCurrent(window)
-    GLenum glewError = glewInit();
+    glewInit();
 
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
