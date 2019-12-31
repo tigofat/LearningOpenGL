@@ -15,6 +15,9 @@ project "LearningOpenGL"
         "%{prj.name}/src/**.cpp"
     }
 
+    configurations "windows"
+        cppdialect "c++17"
+
     -- configuration "macosx"
     --     links {
     --         "Cocoa.framework", 
@@ -48,6 +51,7 @@ project "LearningOpenGL"
     filter "configurations:Debug"
         defines { "DEBUG" }
         symbols "On"
+        debugdir "%{prj.name}"
 
     filter "configurations:Release"
         defines { "NDEBUG" }
