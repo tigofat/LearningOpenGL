@@ -11,8 +11,12 @@
 #include "IndexBuffer.h"
 #include "Shaders.h"
 #include "error_handling.h"
+#include "Renderer.h"
+#include "Texture.h"
+
 
 #define WORKING_DIR "C:/Users/tigra_/Desktop/cc/learning_opengl/LearningOpenGL"
+#define PROJECT_DIR "C:/Users/tigra_/Desktop/cc/learning_opengl"
 
 
 int main(void)
@@ -47,10 +51,10 @@ int main(void)
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5, 0.5f
+        -0.5f, -0.5f, 0.0f, 0.0f,
+        0.5f, -0.5f, 1.0f, 0.0f,
+        0.5f, 0.5f, 1.0f, 1.0f,
+        -0.5, 0.5f, 0.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -60,8 +64,9 @@ int main(void)
 
     VertexArray va;
 
-    VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
     VertexBufferLayout layout;
+    layout.Push(VertexBufferLayoutElement { GL_FLOAT, 2, GL_FALSE });
     layout.Push(VertexBufferLayoutElement { GL_FLOAT, 2, GL_FALSE });
 
     va.AddBuffer(vb, layout);
@@ -75,30 +80,30 @@ int main(void)
     program.AttachShader(Shader {GL_FRAGMENT_SHADER, shaderSource.FragmentShader.c_str()});
     program.Link();
 
-    int location = glGetUniformLocation(program.GetRendererId(), "u_Color");
-    Assert(location != -1);
-
-    float r = 0.0f;
-    float increment = 0.05f;
+    Texture texture(WORKING_DIR"/res/textures/tigran.png");
+    texture.Bind();
+    program.SetUniform1i("u_Texture", 0);
 
     program.Unbind();
     vb.Unbind();
     ib.Unbind();
     va.Unbind();
 
+    Renderer renderer;
+
+    float r = 0.0f;
+    float increment = 0.05f;
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        renderer.Clear();
 
         program.Bind();
-        GLCall(glUniform4f(location, r, 0.3, 0.8, 1.0));
+        program.SetUnifrom4f("u_Color", r, 0.0, 0.0, 1.0);
 
-        va.Bind();
-        ib.Bind();
-
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        renderer.Draw(va, ib, program);
 
         if (r > 1.0f)
             increment = -0.05f;

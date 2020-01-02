@@ -8,48 +8,6 @@
 #include "Shaders.h"
 
 
-// unsigned int CompileShader(unsigned int type, const std::string source) {
-//     unsigned int shaderId = glCreateShader(type);
-//     const char* src = source.c_str();
-//     glShaderSource(shaderId, 1, &src, nullptr);
-//     glCompileShader(shaderId);
-
-//     // error handling
-//     int result;
-//     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
-    
-//     if (result == GL_FALSE) {
-//         int length;
-//         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
-//         char* message = (char*) alloca(length * sizeof(char));
-//         glGetShaderInfoLog(shaderId, length, &length, message);
-//         std::cout << "Failed to compile " << 
-//         (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader" << std::endl;
-//         std::cout << message << std::endl;
-//         glDeleteShader(shaderId);
-
-//         return 0;
-//     }
-
-//     return shaderId;
-// }
-
-// unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader) {
-//     unsigned int program = glCreateProgram();
-//     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
-//     unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
-
-//     glAttachShader(program, vs);
-//     glAttachShader(program, fs);
-//     glLinkProgram(program);
-//     glValidateProgram(program);
-
-//     glDeleteShader(vs);
-//     glDeleteShader(fs);
-
-//     return program;
-// }
-
 bool Shader::Compile() const
 {
     glShaderSource(m_RendererId, 1, &m_Source, nullptr);
@@ -72,6 +30,31 @@ bool Shader::Compile() const
         return false;
     }
     return true;
+}
+
+int ShaderProgram::GetUniformLocation(const std::string& name)
+{
+    for (auto elem : m_UniformLocationCache)
+    {
+        if (elem.first == name)
+            return m_UniformLocationCache[name];
+    }
+
+    GLCall(int location = glGetUniformLocation(m_RendererId, name.c_str()));
+    Assert(location != -1);
+    m_UniformLocationCache.insert({name, location});
+    
+    return location;
+}
+
+void ShaderProgram::SetUniform1i(const std::string& name, int slot)
+{
+    GLCall(glUniform1i(GetUniformLocation(name), slot));
+}
+
+void ShaderProgram::SetUnifrom4f(const std::string& name, float v0, float v1, float v2, float v3)
+{        
+    GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
 ShaderProgramSource ParseShader(const std::string& filePath)

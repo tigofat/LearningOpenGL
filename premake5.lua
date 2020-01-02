@@ -29,7 +29,8 @@ project "LearningOpenGL"
     -- including GLFW headers
     includedirs { 
         "%{prj.name}/vender/GLFW/include",
-        "%{prj.name}/vender/GLEW/include"
+        "%{prj.name}/vender/GLEW/include",
+        "%{prj.name}/src/vendor/stb_image"
     }
 
     -- linking with GLFW
