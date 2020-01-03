@@ -51,15 +51,12 @@ public:
 
     void AttachShader(const Shader& shader) { GLCall(glAttachShader(m_RendererId, shader.GetRendererId())); }
 
-    void Link() 
-    { 
-        GLCall(glLinkProgram(m_RendererId));
-        GLCall(glValidateProgram(m_RendererId)); 
-    }
+    void Link();
 
     int GetUniformLocation(const std::string& uniformVariableName);
 
     void SetUniform1i(const std::string& name, int slot);
+    void SetUniform1f(const std::string& name, float v);
     void SetUnifrom4f(const std::string& name, float v0, float v1, float v2, float v3);
 
     void Bind() const { GLCall(glUseProgram(m_RendererId)); }

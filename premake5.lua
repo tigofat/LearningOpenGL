@@ -11,7 +11,9 @@ project "LearningOpenGL"
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
     files { 
-        "%{prj.name}/src/**.h", 
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.hpp",
+        "%{prj.name}/src/**.cc",
         "%{prj.name}/src/**.cpp"
     }
 
@@ -22,21 +24,18 @@ project "LearningOpenGL"
     --     links {
     --         "Cocoa.framework", 
     --         "IOKit.framework", 
-    --         "CoreVideo.framework",
-    --         "OpenGL.framework"
+    --         "CoreVideo.framework"
     --     }
 
-    -- including GLFW headers
-    includedirs { 
-        "%{prj.name}/vender/GLFW/include",
-        "%{prj.name}/vender/GLEW/include",
-        "%{prj.name}/src/vendor/stb_image"
+    includedirs {
+        "%{prj.name}/vendor/GLFW/include",
+        "%{prj.name}/vendor/GLEW/include",
+        "%{prj.name}/src/vendor"
     }
 
-    -- linking with GLFW
     libdirs {
-        "%{prj.name}/vender/GLFW/lib-vc2019",
-        "%{prj.name}/vender/GLEW/lib"
+        "%{prj.name}/vendor/GLFW/lib-vc2019",
+        "%{prj.name}/vendor/GLEW/lib"
     }
 
     links {

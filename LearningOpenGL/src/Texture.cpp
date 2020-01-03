@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "stb_image.h"
+#include "stb_image/stb_image.h"
 
 #include "Texture.h"
 #include "error_handling.h"
@@ -19,11 +19,14 @@ Texture::Texture(const std::string& path)
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
     GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-
     if (m_LocalBuffer)
+    {
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
+        GLCall(glBindTexture(GL_TEXTURE_2D, 0));
         stbi_image_free(m_LocalBuffer);
+    } else {
+        std::cout << "Failed to load texture" << std::endl;
+    }
 }
 
 Texture::~Texture()

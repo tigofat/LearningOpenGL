@@ -32,6 +32,12 @@ bool Shader::Compile() const
     return true;
 }
 
+void ShaderProgram::Link() 
+{
+    GLCall(glLinkProgram(m_RendererId));
+    GLCall(glValidateProgram(m_RendererId)); 
+}
+
 int ShaderProgram::GetUniformLocation(const std::string& name)
 {
     for (auto elem : m_UniformLocationCache)
@@ -50,6 +56,11 @@ int ShaderProgram::GetUniformLocation(const std::string& name)
 void ShaderProgram::SetUniform1i(const std::string& name, int slot)
 {
     GLCall(glUniform1i(GetUniformLocation(name), slot));
+}
+
+void ShaderProgram::SetUniform1f(const std::string& name, float v)
+{
+    GLCall(glUniform1f(GetUniformLocation(name), v));
 }
 
 void ShaderProgram::SetUnifrom4f(const std::string& name, float v0, float v1, float v2, float v3)

@@ -3,17 +3,6 @@
 #include <vector>
 #include "error_handling.h" 
 
-class VertexBuffer
-{
-private:
-    unsigned int m_RendererId;
-public:
-    VertexBuffer(const float* data, unsigned int size);
-    ~VertexBuffer();
-
-    void Bind() const;
-    void Unbind() const;
-};
 
 struct VertexBufferLayoutElement 
 {
@@ -48,4 +37,16 @@ public:
     int Size() const { return m_Elements.size(); }
 
     int GetStride() const { return m_Stride; }
+};
+
+class VertexBuffer
+{
+private:
+    unsigned int m_RendererId;
+public:
+    VertexBuffer(const float* data, unsigned int size);
+    ~VertexBuffer();
+
+    void Bind() const;
+    void Unbind() const;
 };
